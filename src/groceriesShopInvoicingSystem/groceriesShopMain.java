@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
@@ -171,26 +172,23 @@ st.execute(sql);
 									break;
 								case "b"://Delete Items
 							      
-							        ResultSet resultSet = st.executeQuery( "Select * from items");
-							  
-							                 while (resultSet.next()) {
-							                   	 System.out.println("item id: "+resultSet.getInt("item_id")+" | item name:  "+resultSet.getString("item_name")+" | unit price:  "+resultSet.getFloat("item_unit")+" | quantity:  "
-													        + resultSet.getInt("item_quantity") +" | qtyAmount: "+ resultSet.getInt("item_qty"));
-							     
-							      
-			       
-							        
-							        }
+							     showItemMenu(con);
 							                 System.out.println("\n\nselect the id you want to delete from above list:"); 
 							                 String deleteItemSTR="DELETE FROM items WHERE item_id=" +scan.nextInt();
 											    scan.nextLine();
 											    st.executeUpdate(deleteItemSTR);  
 									break;
 								case "c":// Change Item Price
-									
+								     showItemMenu(con);
+					                 System.out.println("\n\nselect the id you want to change it is price :"); 
+					                 int id = scan.nextInt();
+					                 System.out.println("\n\nenter the new price :"); 
+					                 String updatePrice="UPDATE items SET item_unit = "+scan.nextInt()+
+					                 		"WHERE item_id ="+id;
+					                 st.execute(updatePrice);
 									break;
 								case "d"://Report All Items
-								
+									showItemMenu(con);
 									break;
 								case "f": //go Back
 
@@ -234,4 +232,21 @@ st.execute(sql);
 		    	}
 	}
 
+	
+	static void showItemMenu(    Connection con) throws SQLException {
+
+     
+		Statement st = con.createStatement();
+		
+		ResultSet resultSet = st.executeQuery( "Select * from items");
+		  
+        while (resultSet.next()) {
+          	 System.out.println("item id: "+resultSet.getInt("item_id")+" | item name:  "+resultSet.getString("item_name")+" | unit price:  "+resultSet.getFloat("item_unit")+" | quantity:  "
+				        + resultSet.getInt("item_quantity") +" | qtyAmount: "+ resultSet.getInt("item_qty"));
+
+
+
+
+};
+	}
 }
