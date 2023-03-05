@@ -166,9 +166,25 @@ public class groceriesShopMain {
 									   String sql = "insert into items values ('"+product.getItemName()+"',"
 											  + product.getUnitPrice()+","+product.getQuantity()+","+product.getQtyAmount()+")";
 st.execute(sql);
+
+
 									break;
 								case "b"://Delete Items
-							
+							      
+							        ResultSet resultSet = st.executeQuery( "Select * from items");
+							  
+							                 while (resultSet.next()) {
+							                   	 System.out.println("item id: "+resultSet.getInt("item_id")+" | item name:  "+resultSet.getString("item_name")+" | unit price:  "+resultSet.getFloat("item_unit")+" | quantity:  "
+													        + resultSet.getInt("item_quantity") +" | qtyAmount: "+ resultSet.getInt("item_qty"));
+							     
+							      
+			       
+							        
+							        }
+							                 System.out.println("\n\nselect the id you want to delete from above list:"); 
+							                 String deleteItemSTR="DELETE FROM items WHERE item_id=" +scan.nextInt();
+											    scan.nextLine();
+											    st.executeUpdate(deleteItemSTR);  
 									break;
 								case "c":// Change Item Price
 									
