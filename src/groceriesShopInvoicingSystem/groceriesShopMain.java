@@ -53,7 +53,7 @@ public class groceriesShopMain {
 			Integer staticsreport;
 			Integer allInvoicesreport;
 			Integer showProgramStatistics;
-			ProgramStatistics ps = new ProgramStatistics();
+
 			try {
 				shopSettings = Reporting.getProgramStatisticsReport().getShopSettings();
 				manageShopItems = Reporting.getProgramStatisticsReport().getManageShopItems();
@@ -69,8 +69,8 @@ public class groceriesShopMain {
 				allInvoicesreport = 0;
 				showProgramStatistics = 0;
 				error.getMessage();
-			}
-			// create a new table
+			}		
+			ProgramStatistics ps = new ProgramStatistics();			// create a new table
 
 			Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 			DriverManager.registerDriver(driver);
@@ -357,8 +357,26 @@ scan.nextLine();
 
 					case "d"://
 						staticsreport++;
-						int TotalSales = 0;
+			
+				
+				int TotalSales = 0;
 
+		
+
+				ResultSet resultSet = st.executeQuery("select * from invocie");
+
+				while (resultSet.next()) {
+					System.out.println(resultSet.getInt("totalAmount"));
+					TotalSales +=resultSet.getInt("totalAmount");
+				
+
+				}
+				;
+				System.out.println(TotalSales);
+		
+				
+				Reporting.createStatisticsReport("No Of Items\t:" +getSize(con,"items")
+				+ "\nNo of Invoices\t:" +getSize(con,"invocie")+ "\nNo of shops\t: " +getSize(con,"shops") +"\nTotal Sales\t:" + TotalSales);
 				
 					
 						break;
@@ -381,7 +399,7 @@ scan.nextLine();
 
 						System.out.println("\n\t\tthe program statics\n\nShop Settings\t:"
 								+ Reporting.getProgramStatisticsReport().getShopSettings() + "\nManage Shop Items\t:"
-								+ Reporting.getProgramStatisticsReport().getManageShopItems() + "\ncreate Invoice\t:"
+								+ Reporting.getProgramStatisticsReport().getManageShopItems() + "cre\nate Invoice\t:"
 								+ Reporting.getProgramStatisticsReport().getCreateInvoice()
 								+ "\nreate items/invoices statics report\t:"
 								+ Reporting.getProgramStatisticsReport().getStaticsreport()
@@ -463,4 +481,14 @@ String allInvoices= "";
 		}
 		;
 	}
+	
+	static int getSize(Connection con ,String tableName) throws SQLException {
+		Statement st = con.createStatement();
+		ResultSet rs= st.executeQuery("select * from "+tableName);
+		int i = 0;
+		while(rs.next()) {
+		    i++;
+		}
+		return i;
+	};
 }
