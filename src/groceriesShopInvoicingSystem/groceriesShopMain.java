@@ -77,27 +77,31 @@ public class groceriesShopMain {
 			// con = DriverManager.getConnection(url, user, pass);
 			con = DriverManager.getConnection(url, "sa", "root");
 			Statement st = con.createStatement();
-
-//			    
-//			    String itemsTableStr = "CREATE TABLE items (" +
-//			    		 "item_id  INTEGER IDENTITY(1,1) Primary Key, " +
-//			    		 " item_name TEXT, " +
-//			    		 "item_unit float,"+
-//			    		 "item_quantity INTEGER, " +
-//			    	       "item_qty INTEGER )" ;
-
-			// st.executeUpdate(itemsTableStr);
-
-			String invopiceTableStr = "CREATE TABLE invocie  (" + "invoice_id  INTEGER IDENTITY(1,1) Primary Key, "
-					+ "customerFullName text," + " phoneNumber Integer," + "	invoiceDate	date ,"
-					+ "item_id_fk  INTEGER," + "FOREIGN KEY (item_id_fk) REFERENCES items(item_id) ,"
-					+ " numberOfItems Integer," + " totalAmount Integer," + " paidAmount Integer,"
-					+ " balance Integer)";
-			// st.execute(invopiceTableStr);
+		
 
 			String shopsTableStr = "CREATE TABLE shops  (" + "shop_id  INTEGER IDENTITY(1,1) Primary Key, "
 					+ "name text," + "email text," + "website text," + "fax text)";
-			// st.execute(shopsTableStr);
+		//	 st.execute(shopsTableStr);
+			    
+			    String itemsTableStr = "CREATE TABLE items (" +
+			    		 "item_id  INTEGER IDENTITY(1,1) Primary Key, " +
+			    		 " item_name TEXT, " +
+			    		 "item_unit float,"+
+			    		 "item_quantity INTEGER, " +
+			    	       "item_qty INTEGER, "
+			    			+ "shop_id_fk  INTEGER,"+
+							"FOREIGN KEY (shop_id_fk) REFERENCES shops(shop_id)  )" ;
+
+		 st.executeUpdate(itemsTableStr);
+			String invopiceTableStr = "CREATE TABLE invocie  (" + "invoice_id  INTEGER IDENTITY(1,1) Primary Key, "
+					+ "customerFullName text," + " phoneNumber Integer," + "	invoiceDate	date ,"
+					+ "item_id_fk  INTEGER,"+
+					"FOREIGN KEY (item_id_fk) REFERENCES items(item_id),"
+					+ " numberOfItems Integer," + " totalAmount Integer," + " paidAmount Integer,"
+					+ " balance Integer,"
+					+ "shop_id_fk  INTEGER,"+
+					"FOREIGN KEY (shop_id_fk) REFERENCES shops(shop_id) )";
+			st.execute(invopiceTableStr);
 			try (Scanner scan = new Scanner(System.in)) {
 				Menu menu = new Menu();
 
@@ -183,7 +187,8 @@ public class groceriesShopMain {
 											+ resultSet.getInt("numberOfItems") + " |totalAmount: "
 											+ resultSet.getInt("totalAmount") + " |paidAmount: "
 											+ resultSet.getInt("paidAmount") + " |balance: "
-											+ resultSet.getInt("balance") + "\n\n");
+											+ resultSet.getInt("balance") + 
+											 resultSet.getInt("shop_id_fk") +"\n\n");
 
 								}
 								;
@@ -211,7 +216,10 @@ public class groceriesShopMain {
 
 								System.out.println("Add Items");
 								Product product = new Product();
-
+System.out.println("enter the shop id you want to add items to it");
+showAllshops(con);
+int shopId=scan.nextInt();
+scan.nextLine();
 								System.out.println("what is the item name");
 								product.setItemName(scan.nextLine());
 								System.out.println("what is the item unit price");
@@ -226,7 +234,7 @@ public class groceriesShopMain {
 								scan.nextLine();
 								String sql = "insert into items values ('" + product.getItemName() + "',"
 										+ product.getUnitPrice() + "," + product.getQuantity() + ","
-										+ product.getQtyAmount() + ")";
+										+ product.getQtyAmount() + ","+ shopId+")";
 								st.execute(sql);
 
 								break;
@@ -260,7 +268,7 @@ public class groceriesShopMain {
 						}
 
 						break;
-					case "c": //
+					case "c": //create invoive
 						createInvoice++;
 						// inoviceCount++;
 						int totalAmount = 0;
@@ -268,10 +276,13 @@ public class groceriesShopMain {
 						boolean purchaseFlag = true;
 						ArrayList<Product> listOfPurchaseItems = new ArrayList<>();
 						showItemMenu(con);
+						
+			
+						
 						System.out.println("\n\n enter the item id , customer purchase from above list of items ");
 
 						while (purchaseFlag) {
-
+						
 							ResultSet resultSet = st
 									.executeQuery("Select * from items where item_id =" + scan.nextInt());
 							scan.nextLine();
@@ -282,6 +293,8 @@ public class groceriesShopMain {
 								p.setItemID(resultSet.getInt("item_id"));
 								p.setItemName(resultSet.getString("item_name"));
 								p.setUnitPrice(resultSet.getFloat("item_unit"));
+								p.setShopId(resultSet.getInt("shop_id_fk"));
+							
 								listOfPurchaseItems.add(p);
 
 							}
@@ -291,7 +304,7 @@ public class groceriesShopMain {
 								for (Product p : listOfPurchaseItems) {
 									totalAmount += p.getUnitPrice();
 									System.out.println("the purches");
-									System.out.println(p.getItemID() + " " + p.getItemName());
+									System.out.println(p.getItemID() + " " + p.getItemName() +" shope id : "  +p.getShopId());
 								}
 								purchaseFlag = false;
 							} else {
@@ -332,7 +345,7 @@ public class groceriesShopMain {
 
 									+ invoice.getInvoiceDate() + "'," + p.getItemID() + "," + invoice.getNumberOfItems()
 									+ "," + invoice.getTotalAmount() + "," + invoice.getPaidAmount() + ","
-									+ invoice.getBalance() + ")";
+									+ invoice.getBalance() + "," +p.getShopId() + ")";
 							st.execute(sql);
 						}
 
@@ -382,8 +395,8 @@ public class groceriesShopMain {
 			System.out.println(
 					"item id: " + resultSet.getInt("item_id") + " | item name:  " + resultSet.getString("item_name")
 							+ " | unit price:  " + resultSet.getFloat("item_unit") + " | quantity:  "
-							+ resultSet.getInt("item_quantity") + " | qtyAmount: " + resultSet.getInt("item_qty"));
-
+							+ resultSet.getInt("item_quantity") + " | qtyAmount: " + resultSet.getInt("item_qty")
+			+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk"));
 		}
 		;
 
@@ -401,7 +414,9 @@ public class groceriesShopMain {
 					+ " |invoiceDate:  " + resultSet.getDate("invoiceDate") + " |item_id_fk: "
 					+ resultSet.getInt("item_id_fk") + " |numberOfItems: " + resultSet.getInt("numberOfItems")
 					+ " |totalAmount: " + resultSet.getInt("totalAmount") + " |paidAmount: "
-					+ resultSet.getInt("paidAmount") + " |balance: " + resultSet.getInt("balance"));
+					+ resultSet.getInt("paidAmount") + " |balance: " + resultSet.getInt("balance")
+					
+					+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk"));
 
 		}
 		;

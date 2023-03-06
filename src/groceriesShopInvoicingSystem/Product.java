@@ -7,10 +7,24 @@ public class Product {
 	private	Integer quantity ; 
 	private	Integer qtyAmount;
 	private Integer itemID;
+	private Integer shopId;
 	
 	
 	
-	
+	/**
+	 * @return the shopId
+	 */
+	public Integer getShopId() {
+		return shopId;
+	}
+
+	/**
+	 * @param shopId the shopId to set
+	 */
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
+	}
+
 	public String getItemName() {
 		return itemName;
 	}
