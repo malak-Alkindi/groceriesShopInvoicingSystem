@@ -149,7 +149,7 @@ else {System.out.println("Table items Exists");}
 								}
 
 								if (getSize(con, "invocie") == 0) {
-									System.out.println("no invoices added");
+									System.out.println("\n\nno invoices added\n");
 								} else {
 									System.out.println("\n\tLoad Data (invoices)");
 									System.out.println(showAllInvoices(con));
@@ -195,7 +195,7 @@ else {System.out.println("Table items Exists");}
 								break;
 							case "d":// search Invoice
 								if (getSize(con, "shops") > 0) {
-									if (getSize(con, "invoice") > 0) {
+									if (getSize(con, "invocie") > 0) {
 										System.out.println("enter the invoice id you want to search");
 										String searchInvo = "select * from invocie where invoice_id =" + scan.nextInt();
 
