@@ -6,7 +6,7 @@ public class Product {
 	private	float unitPrice;
 	private	Integer quantity ; 
 	private	Integer qtyAmount;
-	
+	private Integer itemID;
 	
 	
 	
@@ -43,5 +43,12 @@ public class Product {
 		this.qtyAmount = qtyAmount;
 	}
 	
+	public Integer getItemID() {
+		return itemID;
+	}
+	
+	public void setItemID(Integer itemID) {
+		this.itemID = itemID;
+	}
 	
 }
