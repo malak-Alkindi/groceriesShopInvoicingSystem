@@ -370,7 +370,25 @@ scan.nextLine();
 
 					case "f":
 						showProgramStatistics++;
+						ps.setAllInvoicesreport(allInvoicesreport);
+						ps.setCreateInvoice(createInvoice);
 
+						ps.setManageShopItems(manageShopItems);
+						ps.setShopSettings(shopSettings);
+						ps.setStaticsreport(staticsreport);
+						ps.setShowProgramStatistics(showProgramStatistics);
+						Reporting.createProgramStatisticsReport(ps);
+
+						System.out.println("\n\t\tthe program statics\n\nShop Settings\t:"
+								+ Reporting.getProgramStatisticsReport().getShopSettings() + "\nManage Shop Items\t:"
+								+ Reporting.getProgramStatisticsReport().getManageShopItems() + "\ncreate Invoice\t:"
+								+ Reporting.getProgramStatisticsReport().getCreateInvoice()
+								+ "\nreate items/invoices statics report\t:"
+								+ Reporting.getProgramStatisticsReport().getStaticsreport()
+								+ "\ncreate All Invoices report\t:"
+								+ Reporting.getProgramStatisticsReport().getAllInvoicesreport()
+								+ "\nshow Program Statistics\t:"
+								+ Reporting.getProgramStatisticsReport().getShowProgramStatistics() + "\n");
 						break;
 					}
 
