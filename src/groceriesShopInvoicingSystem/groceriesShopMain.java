@@ -45,7 +45,7 @@ public class groceriesShopMain {
 					"c. Change Item Price", "d. Report All Items", "f. go Back" };
 
 			String[] mainMenuArray = { "chose one of the follwing", "a) Shop Settings", "b) Manage Shop Items",
-					"c) create Invoice", "d) create items/invoices statics report", "e) create All Invoices report",
+					"c) create Invoice", "d) create shops/items/invoices statics report", "e) create All Invoices report",
 					"f) show Program Statistics", "x) exit " };
 			Integer shopSettings;
 			Integer manageShopItems;
@@ -370,15 +370,14 @@ scan.nextLine();
 					TotalSales +=resultSet.getInt("totalAmount");
 				
 
-				}
-				;
+				};
 				System.out.println(TotalSales);
 		
 				
 				Reporting.createStatisticsReport("No Of Items\t:" +getSize(con,"items")
 				+ "\nNo of Invoices\t:" +getSize(con,"invocie")+ "\nNo of shops\t: " +getSize(con,"shops") +"\nTotal Sales\t:" + TotalSales);
 				
-					
+		
 						break;
 
 					case "e":
@@ -407,6 +406,17 @@ scan.nextLine();
 								+ Reporting.getProgramStatisticsReport().getAllInvoicesreport()
 								+ "\nshow Program Statistics\t:"
 								+ Reporting.getProgramStatisticsReport().getShowProgramStatistics() + "\n");
+						break;
+					case "x":
+						System.out.println("Are you sure you want to exit? yes/no");
+						if (scan.nextLine().toLowerCase().equals("no")) {
+							System.out.println("\t\tstarting of shop program");
+						} else if (scan.nextLine().toLowerCase().equals("yes")) {
+							System.out.println("Exit the shop program");
+
+							programFlag = false;
+
+						}
 						break;
 					}
 
