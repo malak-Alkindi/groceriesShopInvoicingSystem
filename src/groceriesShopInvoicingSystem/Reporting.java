@@ -15,28 +15,6 @@ import java.util.stream.Stream;
 public class Reporting  implements Serializable{
 
 	
-
-	static void createStatisticsReport(String name) throws IOException {
-
-	
-		FileWriter w = new FileWriter("Statistics .txt");
-		w.write("\t\tStatistics\n\n");
-		w.write(name);
-		w.close();
-
-	}
-	
-
-	static void statics(String name) throws IOException {
-
-		
-
-		FileWriter w = new FileWriter("Statistics .txt");
-		w.write("\t\tAllInvoiceReport");
-		w.write(name);
-		w.close();
-
-	}
 	static void createProgramStatisticsReport(ProgramStatistics PS) throws IOException {
 		try {
 		
@@ -56,24 +34,53 @@ public class Reporting  implements Serializable{
 		}
 
 	}
-	static ProgramStatistics getProgramStatisticsReport() {
-		ProgramStatistics in=null;
-	
-		try {
-			FileInputStream fi = new FileInputStream(new File("ProgramStatisticsReport.txt"));
-			ObjectInputStream oi = new ObjectInputStream(fi);
-
-			// Read objects
-			 in = (ProgramStatistics) oi.readObject();
+	static void statics(String name) throws IOException {
 
 		
 
-			oi.close();
-			fi.close();
-		} catch (Exception error) {
-			error.getMessage();
-		}
-return in;
+		FileWriter w = new FileWriter("Statistics .txt");
+		w.write("\t\tAllInvoiceReport");
+		w.write(name);
+		w.close();
+
 	}
-	
+
+		static void createAllInvoiceReport(String name) throws IOException {
+
+			
+			FileWriter w = new FileWriter("AllInvoiceReport.txt");
+			w.write("\t\tAllInvoiceReport");
+			w.write(name);
+			w.close();
+
+		}
+		
+		static void createStatisticsReport(String name) throws IOException {
+
+			
+			FileWriter w = new FileWriter("Statistics .txt");
+			w.write("\t\tStatistics\n\n");
+			w.write(name);
+			w.close();
+
+		}
+		static ProgramStatistics getProgramStatisticsReport() {
+			ProgramStatistics in=null;
+		
+			try {
+				FileInputStream fi = new FileInputStream(new File("ProgramStatisticsReport.txt"));
+				ObjectInputStream oi = new ObjectInputStream(fi);
+
+				// Read objects
+				 in = (ProgramStatistics) oi.readObject();
+
+			
+
+				oi.close();
+				fi.close();
+			} catch (Exception error) {
+				error.getMessage();
+			}
+	return in;
+		}
 }

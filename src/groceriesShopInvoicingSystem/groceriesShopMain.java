@@ -53,7 +53,7 @@ public class groceriesShopMain {
 			Integer staticsreport;
 			Integer allInvoicesreport;
 			Integer showProgramStatistics;
-
+			ProgramStatistics ps = new ProgramStatistics();
 			try {
 				shopSettings = Reporting.getProgramStatisticsReport().getShopSettings();
 				manageShopItems = Reporting.getProgramStatisticsReport().getManageShopItems();
@@ -92,7 +92,7 @@ public class groceriesShopMain {
 			    			+ "shop_id_fk  INTEGER,"+
 							"FOREIGN KEY (shop_id_fk) REFERENCES shops(shop_id)  )" ;
 
-		 st.executeUpdate(itemsTableStr);
+	//	 st.executeUpdate(itemsTableStr);
 			String invopiceTableStr = "CREATE TABLE invocie  (" + "invoice_id  INTEGER IDENTITY(1,1) Primary Key, "
 					+ "customerFullName text," + " phoneNumber Integer," + "	invoiceDate	date ,"
 					+ "item_id_fk  INTEGER,"+
@@ -101,7 +101,7 @@ public class groceriesShopMain {
 					+ " balance Integer,"
 					+ "shop_id_fk  INTEGER,"+
 					"FOREIGN KEY (shop_id_fk) REFERENCES shops(shop_id) )";
-			st.execute(invopiceTableStr);
+		//	st.execute(invopiceTableStr);
 			try (Scanner scan = new Scanner(System.in)) {
 				Menu menu = new Menu();
 
@@ -133,7 +133,7 @@ public class groceriesShopMain {
 
 								showItemMenu(con);
 								System.out.println("\n\tLoad Data (invoices)");
-								showAllInvoices(con);
+								System.out.println(showAllInvoices(con));
 
 								break;
 							case "b":
@@ -212,7 +212,7 @@ public class groceriesShopMain {
 							switch (subMenuResponce) {
 
 							case "a": // Add Items
-								// itemCount++;
+							
 
 								System.out.println("Add Items");
 								Product product = new Product();
@@ -270,7 +270,7 @@ scan.nextLine();
 						break;
 					case "c": //create invoive
 						createInvoice++;
-						// inoviceCount++;
+						
 						int totalAmount = 0;
 						Invoice invoice = new Invoice();
 						boolean purchaseFlag = true;
@@ -357,11 +357,15 @@ scan.nextLine();
 
 					case "d"://
 						staticsreport++;
+						int TotalSales = 0;
 
+				
+					
 						break;
 
 					case "e":
-
+						allInvoicesreport++;
+						Reporting.createAllInvoiceReport(showAllInvoices(con) +"\n\n ");
 						break;
 
 					case "f":
@@ -385,41 +389,42 @@ scan.nextLine();
 	// showAllInvoices(con)
 	// showItemMenu(con)
 
-	static void showItemMenu(Connection con) throws SQLException {
-
+	static String showItemMenu(Connection con) throws SQLException {
+String allItems="";
 		Statement st = con.createStatement();
 
 		ResultSet resultSet = st.executeQuery("Select * from items");
 
 		while (resultSet.next()) {
-			System.out.println(
+			allItems=
 					"item id: " + resultSet.getInt("item_id") + " | item name:  " + resultSet.getString("item_name")
 							+ " | unit price:  " + resultSet.getFloat("item_unit") + " | quantity:  "
 							+ resultSet.getInt("item_quantity") + " | qtyAmount: " + resultSet.getInt("item_qty")
-			+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk"));
+			+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk");
 		}
 		;
-
+return allItems;
 	}
 
-	static void showAllInvoices(Connection con) throws SQLException {
-
+	static String showAllInvoices(Connection con) throws SQLException {
+String allInvoices= "";
 		Statement st = con.createStatement();
 
 		ResultSet resultSet = st.executeQuery("Select * from invocie");
 
 		while (resultSet.next()) {
-			System.out.println("invoice_id: " + resultSet.getInt("invoice_id") + " |customerFullName:  "
+			allInvoices ="invoice_id: " + resultSet.getInt("invoice_id") + " |customerFullName:  "
 					+ resultSet.getString("customerFullName") + " |phoneNumber:  " + resultSet.getString("phoneNumber")
 					+ " |invoiceDate:  " + resultSet.getDate("invoiceDate") + " |item_id_fk: "
 					+ resultSet.getInt("item_id_fk") + " |numberOfItems: " + resultSet.getInt("numberOfItems")
 					+ " |totalAmount: " + resultSet.getInt("totalAmount") + " |paidAmount: "
 					+ resultSet.getInt("paidAmount") + " |balance: " + resultSet.getInt("balance")
 					
-					+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk"));
+					+ " |shop_id_fk: " + resultSet.getInt("shop_id_fk") +"\n\n";
 
 		}
-		;
+		return allInvoices;
+		
 	}
 	
 	String shopsTableStr = "CREATE TABLE shops  (" + "shop_id  INTEGER IDENTITY(1,1) Primary Key, "
