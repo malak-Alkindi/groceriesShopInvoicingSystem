@@ -1,4 +1,4 @@
-		AllInvoiceReportinvoice_id: 2 |customerFullName:  malak |phoneNumber:  2332 |invoiceDate:  2023-03-06 |item_id_fk: 2 |numberOfItems: 2 |totalAmount: 25 |paidAmount: 90 |balance: 65 |shop_id_fk: 2
+		AllInvoiceReportinvoice_id: 3 |customerFullName:  fahima |phoneNumber:  88282 |invoiceDate:  2023-03-06 |item_id_fk: 2 |numberOfItems: 1 |totalAmount: 23 |paidAmount: 90 |balance: 67 |shop_id_fk: 2
 
 
 

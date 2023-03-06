@@ -24,8 +24,7 @@ public class groceriesShopMain {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		Scanner scanner = new Scanner(System.in);
 		// sql database authentcations
-		Date n = new Date(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
+
 
 		String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=groceriesShopInvoicingSystem;" + "encrypt=true;"
 				+ "trustServerCertificate=true";
@@ -129,15 +128,30 @@ public class groceriesShopMain {
 							switch (subMenuResponce) {
 
 							case "a": // Load Data (Items and invoices)
+								if(getSize(con,"items")==0) {
+									System.out.println("no items added");
+								}
+								else {
 								System.out.println("\tLoad Data (Items)");
-
-								showItemMenu(con);
+								System.out.println(showItemMenu(con));
+								}
+								
+								if(getSize(con,"invocie")==0) {
+									System.out.println("no invoices added");
+								}
+								else {
 								System.out.println("\n\tLoad Data (invoices)");
 								System.out.println(showAllInvoices(con));
-
+								}
 								break;
 							case "b":
 								
+								if(getSize(con,"shops")==0) {
+									
+									System.out.println("no shop added to update");
+									
+								}
+							else {
 								showAllshops(con);
 								System.out.println("\npls enter Shop id you want to update");
 								int id =scan.nextInt();
@@ -147,8 +161,8 @@ public class groceriesShopMain {
 								scan.nextLine();
 								String updateShopName = "UPDATE shops SET name = '" + scan.nextLine()
 								+ "' WHERE shop_id =" + id;
-					
-						st.execute(updateShopName);
+					st.execute(updateShopName);
+							}
 								break;
 							case "c":
 								System.out.println("add shop info (name/ Tel / Fax / Email / Website)");
@@ -170,7 +184,8 @@ public class groceriesShopMain {
 								st.execute(sql);
 								break;
 							case "d":// search Invoice
-
+								if(getSize(con,"shops")>0 ) {
+									if(getSize(con,"invoice")>0 ) {
 								System.out.println("enter the invoice id you want to search");
 								String searchInvo = "select * from invocie where invoice_id =" + scan.nextInt();
 
@@ -190,8 +205,13 @@ public class groceriesShopMain {
 											+ resultSet.getInt("balance") + 
 											 resultSet.getInt("shop_id_fk") +"\n\n");
 
+								}}
+								else {
+									System.out.println("no invoice added  ");
+									}
+								
 								}
-								;
+								else {	System.out.println("no shop added ");}
 								break;
 
 							case "f": // Go Back
@@ -213,7 +233,7 @@ public class groceriesShopMain {
 
 							case "a": // Add Items
 							
-
+								if(getSize(con,"shops")>0 ) {
 								System.out.println("Add Items");
 								Product product = new Product();
 System.out.println("enter the shop id you want to add items to it");
@@ -236,18 +256,26 @@ scan.nextLine();
 										+ product.getUnitPrice() + "," + product.getQuantity() + ","
 										+ product.getQtyAmount() + ","+ shopId+")";
 								st.execute(sql);
-
+								}else {
+									System.out.println("no shop added to add items to it");
+								}
 								break;
 							case "b":// Delete Items
-
-								showItemMenu(con);
+								if(getSize(con,"items")>0 ) {
+								System.out.println(showItemMenu(con));
 								System.out.println("\n\nselect the id you want to delete from above list:");
 								String deleteItemSTR = "DELETE FROM items WHERE item_id=" + scan.nextInt();
 								scan.nextLine();
 								st.executeUpdate(deleteItemSTR);
+								
+								}
+								else {
+									System.out.println("no items added to delete");
+								}
 								break;
 							case "c":// Change Item Price
-								showItemMenu(con);
+								if(getSize(con,"items")>0 ) {
+								System.out.println(showItemMenu(con));
 								System.out.println("\n\nselect the id you want to change it is price :");
 								int id = scan.nextInt();
 								System.out.println("\n\nenter the new price :");
@@ -255,9 +283,16 @@ scan.nextLine();
 										+ "WHERE item_id =" + id;
 								scan.nextLine();
 								st.execute(updatePrice);
+								}else {
+									System.out.println("no items added to delete");
+								}
 								break;
 							case "d":// Report All Items
-								showItemMenu(con);
+								if(getSize(con,"items")>0 ) {
+							System.out.println(showItemMenu(con));
+								}else {
+								System.out.println("no items added to delete");
+							}
 								break;
 							case "f": // go Back
 
@@ -269,13 +304,16 @@ scan.nextLine();
 
 						break;
 					case "c": //create invoive
+						
+						if(getSize(con,"shops")>0 ) {
+							if(getSize(con,"items")>0 ) {
 						createInvoice++;
 						
 						int totalAmount = 0;
 						Invoice invoice = new Invoice();
 						boolean purchaseFlag = true;
 						ArrayList<Product> listOfPurchaseItems = new ArrayList<>();
-						showItemMenu(con);
+						System.out.println(showItemMenu(con));
 						
 			
 						
@@ -349,10 +387,15 @@ scan.nextLine();
 							st.execute(sql);
 						}
 
-						// mapOfInvoices.put(inoviceCount, invoice);
-						// Reporting.createInvoiceReport(invoice);
-						// menu.setMapOfInvoices(mapOfInvoices);
+				
 						System.out.println("invoice created secufully");
+						
+							}else {
+							System.out.println("no items added  to purches");
+							}
+						
+						}
+						else {	System.out.println("no shop added to create invoice");}
 						break;
 
 					case "d"://
@@ -432,8 +475,7 @@ scan.nextLine();
 			System.err.println(ex);
 		}
 	}
-	// showAllInvoices(con)
-	// showItemMenu(con)
+
 
 	static String showItemMenu(Connection con) throws SQLException {
 String allItems="";
