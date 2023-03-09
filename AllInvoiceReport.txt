@@ -1,3 +1,5 @@
-		AllInvoiceReport
+		AllInvoiceReportinvoice_id: 2 |customerFullName:  esraa |phoneNumber:  763737 |invoiceDate:  2023-03-08 |item_id_fk: 2 |numberOfItems: 2 |totalAmount: 40 |paidAmount: 90 |balance: 50 |shop_id_fk: 2
+
+
 
  

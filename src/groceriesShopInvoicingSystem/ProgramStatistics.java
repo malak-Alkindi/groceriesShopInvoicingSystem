@@ -1,6 +1,8 @@
 package groceriesShopInvoicingSystem;
 
-public class ProgramStatistics {
+import java.io.Serializable;
+
+public class ProgramStatistics  implements Serializable{
 
 //	"chose one of the follwing :\n  "
 //	+ "a) Shop Settings\n  "

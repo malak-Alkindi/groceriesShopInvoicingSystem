@@ -34,7 +34,10 @@ public class groceriesShopMain {
 		        String pass = scanner.nextLine()  ;
 
 		Connection con = null;
+		ProgramStatistics ps = new ProgramStatistics();
 
+		System.out.println(	Reporting.getProgramStatisticsReport());
+	
 		
 		
 		try {
@@ -71,8 +74,7 @@ public class groceriesShopMain {
 				showProgramStatistics = 0;
 				error.getMessage();
 			}
-			ProgramStatistics ps = new ProgramStatistics(); // create a new table
-
+	
 			Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 			DriverManager.registerDriver(driver);
 			 con = DriverManager.getConnection(url, user, pass);
@@ -243,13 +245,16 @@ else {System.out.println("Table items Exists");}
 							switch (subMenuResponce) {
 
 							case "a": // Add Items
-
+								ArrayList<Product> listOfItem = new ArrayList<>();
 								if (getSize(con, "shops") > 0) {
+									boolean addItemsFlag=true;
+									while(addItemsFlag) {
 									System.out.println("Add Items");
 									Product product = new Product();
 									System.out.println("enter the shop id you want to add items to it");
 									showAllshops(con);
-									int shopId = scan.nextInt();
+									product.setShopId(scan.nextInt());
+				
 									scan.nextLine();
 									System.out.println("what is the item name");
 									product.setItemName(scan.nextLine());
@@ -263,10 +268,23 @@ else {System.out.println("Table items Exists");}
 									System.out.println(product.getItemName());
 
 									scan.nextLine();
-									String sql = "insert into items values ('" + product.getItemName() + "',"
-											+ product.getUnitPrice() + "," + product.getQuantity() + ","
-											+ product.getQtyAmount() + "," + shopId + ")";
-									st.execute(sql);
+									listOfItem.add(product);
+									System.out.println("do you want to add another item ?yes/no");
+									if(scanner.nextLine().toLowerCase().equals("yes")) {
+									
+										
+									}
+									else {
+										for(Product p:listOfItem) {
+											String sql = "insert into items values ('" + p.getItemName() + "',"
+													+ p.getUnitPrice() + "," + p.getQuantity() + ","
+													+ p.getQtyAmount() + "," + p.getShopId() + ")";
+											st.execute(sql);
+											
+										}
+										addItemsFlag=false;
+									}
+								}
 								} else {
 									System.out.println("no shop added to add items to it");
 								}
@@ -519,7 +537,6 @@ else {System.out.println("Table items Exists");}
 
 		}
 		return allInvoices;
-
 	}
 
 	String shopsTableStr = "CREATE TABLE shops  (" + "shop_id  INTEGER IDENTITY(1,1) Primary Key, " + "name text,"
@@ -536,8 +553,7 @@ else {System.out.println("Table items Exists");}
 					+ resultSet.getString("name") + " " + "|\temail: " + resultSet.getString("email") + " "
 					+ "|\twebsite: " + resultSet.getString("website") + " " + "|\tfax: " + resultSet.getString("fax"));
 
-		}
-		;
+		};
 	}
 
 	static int getSize(Connection con, String tableName) throws SQLException {
